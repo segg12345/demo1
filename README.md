@@ -12,7 +12,7 @@ qlsv/
 │   └── style.css
 └── README_SETUP.md
 ```
-🛠️ Yêu cầu hệ thống
+## 🛠️ Yêu cầu hệ thống
 Node.js >= 16
 SQL Server 2017+ hoặc SQL Server Express
 npm >= 8
