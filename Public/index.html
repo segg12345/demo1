@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QLSV – Quản lý Sinh viên</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════ -->
+<div id="loginScreen" class="screen active">
+  <div class="login-bg">
+    <div class="login-blob b1"></div>
+    <div class="login-blob b2"></div>
+    <div class="login-blob b3"></div>
+  </div>
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="logo-icon"><i class="fas fa-graduation-cap"></i></span>
+      <span class="logo-text">QLSV</span>
+    </div>
+    <h1 class="login-title">Hệ thống Quản lý<br/>Sinh viên</h1>
+    <p class="login-sub">Đăng nhập để tiếp tục</p>
+
+    <div id="loginError" class="alert-error hidden">
+      <i class="fas fa-circle-exclamation"></i> Tên đăng nhập hoặc mật khẩu không đúng
+    </div>
+
+    <div class="form-group">
+      <label>Tên đăng nhập</label>
+      <div class="input-wrap">
+        <i class="fas fa-user"></i>
+        <input id="loginUser" type="text" placeholder="VD: SV2100001 hoặc admin" autocomplete="off"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Mật khẩu</label>
+      <div class="input-wrap">
+        <i class="fas fa-lock"></i>
+        <input id="loginPass" type="password" placeholder="Nhập mật khẩu"/>
+        <button class="toggle-pw" onclick="togglePw()"><i class="fas fa-eye" id="eyeIcon"></i></button>
+      </div>
+    </div>
+    <button class="btn-login" onclick="doLogin()">
+      <span>Đăng nhập</span><i class="fas fa-arrow-right"></i>
+    </button>
+
+    <div class="login-hint">
+      <b>Demo:</b> Admin → <code>admin / 1</code> &nbsp;|&nbsp; SV → <code>SV2100001 / 12052003</code>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     MAIN APP
+════════════════════════════════════ -->
+<div id="appScreen" class="screen">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="logo-icon sm"><i class="fas fa-graduation-cap"></i></span>
+      <span class="sidebar-title">QLSV</span>
+      <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    </div>
+
+    <div class="user-chip" id="userChip">
+      <div class="user-avatar" id="userAvatar">A</div>
+      <div class="user-info">
+        <div class="user-name" id="userNameDisplay">Admin</div>
+        <div class="user-role" id="userRoleDisplay">Quản trị viên</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Tổng quan</div>
+      <a class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard',this)">
+        <i class="fas fa-chart-pie"></i><span>Dashboard</span>
+      </a>
+
+      <div class="nav-section-label admin-only">Quản lý</div>
+      <a class="nav-item admin-only" data-tab="sinhvien" onclick="switchTab('sinhvien',this)">
+        <i class="fas fa-user-graduate"></i><span>Sinh viên</span>
+      </a>
+      <a class="nav-item admin-only" data-tab="giangvien" onclick="switchTab('giangvien',this)">
+        <i class="fas fa-chalkboard-user"></i><span>Giảng viên</span>
+      </a>
+      <a class="nav-item admin-only" data-tab="monhoc" onclick="switchTab('monhoc',this)">
+        <i class="fas fa-book-open"></i><span>Môn học</span>
+      </a>
+      <a class="nav-item admin-only" data-tab="lop" onclick="switchTab('lop',this)">
+        <i class="fas fa-users"></i><span>Lớp học</span>
+      </a>
+      <a class="nav-item admin-only" data-tab="khoa" onclick="switchTab('khoa',this)">
+        <i class="fas fa-building-columns"></i><span>Khoa</span>
+      </a>
+      <a class="nav-item admin-only" data-tab="diemsv" onclick="switchTab('diemsv',this)">
+        <i class="fas fa-chart-bar"></i><span>Điểm – Đăng ký học</span>
+      </a>
+      <a class="nav-item admin-only" data-tab="import" onclick="switchTab('import',this)">
+        <i class="fas fa-file-import"></i><span>Import dữ liệu</span>
+      </a>
+
+      <div class="nav-section-label student-only">Thông tin của tôi</div>
+      <a class="nav-item student-only" data-tab="myinfo" onclick="switchTab('myinfo',this)">
+        <i class="fas fa-id-card"></i><span>Hồ sơ cá nhân</span>
+      </a>
+      <a class="nav-item student-only" data-tab="mydiem" onclick="switchTab('mydiem',this)">
+        <i class="fas fa-star-half-stroke"></i><span>Bảng điểm</span>
+      </a>
+      <a class="nav-item student-only" data-tab="mylop" onclick="switchTab('mylop',this)">
+        <i class="fas fa-list-check"></i><span>Môn đã đăng ký</span>
+      </a>
+    </nav>
+
+    <button class="btn-logout" onclick="doLogout()">
+      <i class="fas fa-right-from-bracket"></i><span>Đăng xuất</span>
+    </button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="mainContent">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mob-menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <h2 class="page-title" id="pageTitle">Dashboard</h2>
+      </div>
+      <div class="topbar-right">
+        <span class="badge-role" id="topRole">Admin</span>
+      </div>
+    </header>
+
+    <!-- ── DASHBOARD ── -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="dash-charts">
+        <div class="card chart-card">
+          <div class="card-header"><i class="fas fa-chart-bar"></i> Sinh viên theo Khoa</div>
+          <div id="barChart" class="bar-chart-wrap"></div>
+        </div>
+        <div class="card chart-card">
+          <div class="card-header"><i class="fas fa-circle-half-stroke"></i> Trạng thái Sinh viên</div>
+          <div id="pieChart" class="pie-chart-wrap"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SINH VIÊN ── -->
+    <section id="tab-sinhvien" class="tab-content">
+      <div class="toolbar">
+        <input class="search-input" id="svSearch" placeholder="Tìm kiếm sinh viên..." oninput="renderSinhVienTable()"/>
+        <select id="svFilterLop" onchange="renderSinhVienTable()" class="filter-select">
+          <option value="">Tất cả lớp</option>
+        </select>
+        <select id="svFilterTrangThai" onchange="renderSinhVienTable()" class="filter-select">
+          <option value="">Tất cả trạng thái</option>
+          <option>Đang học</option><option>Bảo lưu</option>
+          <option>Tốt nghiệp</option><option>Thôi học</option>
+        </select>
+        <button class="btn-primary" onclick="openModal('svModal')"><i class="fas fa-plus"></i> Thêm</button>
+      </div>
+      <div class="table-wrap"><table id="svTable" class="data-table">
+        <thead><tr>
+          <th>Mã SV</th><th>Họ tên</th><th>Ngày sinh</th><th>Giới tính</th>
+          <th>Email</th><th>Lớp</th><th>Trạng thái</th><th>Hành động</th>
+        </tr></thead>
+        <tbody id="svBody"></tbody>
+      </table></div>
+      <div class="pagination" id="svPagination"></div>
+    </section>
+
+    <!-- ── GIẢNG VIÊN ── -->
+    <section id="tab-giangvien" class="tab-content">
+      <div class="toolbar">
+        <input class="search-input" id="gvSearch" placeholder="Tìm kiếm giảng viên..." oninput="renderGVTable()"/>
+        <button class="btn-primary" onclick="openModal('gvModal')"><i class="fas fa-plus"></i> Thêm</button>
+      </div>
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr>
+          <th>Mã GV</th><th>Họ tên</th><th>Học vị</th><th>Chuyên ngành</th>
+          <th>Email</th><th>Khoa</th><th>Hành động</th>
+        </tr></thead>
+        <tbody id="gvBody"></tbody>
+      </table></div>
+    </section>
+
+    <!-- ── MÔN HỌC ── -->
+    <section id="tab-monhoc" class="tab-content">
+      <div class="toolbar">
+        <input class="search-input" id="mhSearch" placeholder="Tìm môn học..." oninput="renderMHTable()"/>
+        <button class="btn-primary" onclick="openModal('mhModal')"><i class="fas fa-plus"></i> Thêm</button>
+      </div>
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr>
+          <th>Mã MH</th><th>Tên môn</th><th>Số tín chỉ</th><th>Loại môn</th><th>Mô tả</th><th>Hành động</th>
+        </tr></thead>
+        <tbody id="mhBody"></tbody>
+      </table></div>
+    </section>
+
+    <!-- ── LỚP ── -->
+    <section id="tab-lop" class="tab-content">
+      <div class="toolbar">
+        <input class="search-input" id="lopSearch" placeholder="Tìm lớp..." oninput="renderLopTable()"/>
+        <button class="btn-primary" onclick="openModal('lopModal')"><i class="fas fa-plus"></i> Thêm</button>
+      </div>
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr>
+          <th>Mã Lớp</th><th>Tên lớp</th><th>Ngành</th><th>Năm nhập học</th><th>Ngày nhập học</th><th>Hành động</th>
+        </tr></thead>
+        <tbody id="lopBody"></tbody>
+      </table></div>
+    </section>
+
+    <!-- ── KHOA ── -->
+    <section id="tab-khoa" class="tab-content">
+      <div class="toolbar">
+        <input class="search-input" id="khoaSearch" placeholder="Tìm khoa..." oninput="renderKhoaTable()"/>
+        <button class="btn-primary" onclick="openModal('khoaModal')"><i class="fas fa-plus"></i> Thêm</button>
+      </div>
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr>
+          <th>Mã Khoa</th><th>Tên Khoa</th><th>Email</th><th>SĐT</th><th>Ngày thành lập</th><th>Hành động</th>
+        </tr></thead>
+        <tbody id="khoaBody"></tbody>
+      </table></div>
+    </section>
+
+    <!-- ── ĐIỂM SV ── -->
+    <section id="tab-diemsv" class="tab-content">
+      <div class="toolbar">
+        <input class="search-input" id="diemSearch" placeholder="Tìm sinh viên..." oninput="renderDiemTable()"/>
+        <select id="diemFilterSV" onchange="renderDiemDetail()" class="filter-select" style="max-width:220px">
+          <option value="">-- Chọn sinh viên --</option>
+        </select>
+      </div>
+      <div id="diemDetail"></div>
+    </section>
+
+    <!-- ── IMPORT ── -->
+    <section id="tab-import" class="tab-content">
+      <div class="import-wrap">
+        <div class="card import-card">
+          <div class="import-icon"><i class="fas fa-file-excel"></i></div>
+          <h3>Import từ Excel (.xlsx / .csv)</h3>
+          <p>File phải có cột: MaSV, HoTen, NgaySinh, GioiTinh, Email, MaLop (và tùy chọn: DiaChi, SoDienThoai)</p>
+          <div class="drop-zone" id="excelDrop" ondragover="event.preventDefault()" ondrop="handleExcelDrop(event)">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <span>Kéo & thả file hoặc <label for="excelFile" class="link-label">chọn file</label></span>
+            <input type="file" id="excelFile" accept=".csv,.xlsx" hidden onchange="handleExcelFile(event)"/>
+          </div>
+        </div>
+        <div class="card import-card">
+          <div class="import-icon json"><i class="fas fa-file-code"></i></div>
+          <h3>Import từ JSON</h3>
+          <p>Array JSON với các key: MaSV, HoTen, NgaySinh, GioiTinh, Email, MaLop</p>
+          <div class="drop-zone" id="jsonDrop" ondragover="event.preventDefault()" ondrop="handleJsonDrop(event)">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <span>Kéo & thả file hoặc <label for="jsonFile" class="link-label">chọn file</label></span>
+            <input type="file" id="jsonFile" accept=".json" hidden onchange="handleJsonFile(event)"/>
+          </div>
+          <div class="json-direct">
+            <p>Hoặc dán JSON trực tiếp:</p>
+            <textarea id="jsonInput" rows="6" placeholder='[{"MaSV":"SV001","HoTen":"Nguyễn A","NgaySinh":"2003-01-01","GioiTinh":"Nam","Email":"a@b.com","MaLop":"K2021A"}]'></textarea>
+            <button class="btn-primary" onclick="importJSON()"><i class="fas fa-upload"></i> Import JSON</button>
+          </div>
+        </div>
+      </div>
+      <div id="importResult"></div>
+    </section>
+
+    <!-- ── MY INFO (STUDENT) ── -->
+    <section id="tab-myinfo" class="tab-content">
+      <div id="myInfoContent"></div>
+    </section>
+
+    <!-- ── MY DIEM (STUDENT) ── -->
+    <section id="tab-mydiem" class="tab-content">
+      <div id="myDiemContent"></div>
+    </section>
+
+    <!-- ── MY LOP (STUDENT) ── -->
+    <section id="tab-mylop" class="tab-content">
+      <div id="myLopContent"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════
+     MODALS
+════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeAllModals()"></div>
+
+<!-- Modal Sinh Viên -->
+<div class="modal" id="svModal">
+  <div class="modal-header">
+    <h3 id="svModalTitle">Thêm Sinh viên</h3>
+    <button class="modal-close" onclick="closeAllModals()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="svEditId"/>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Mã SV *</label>
+        <input id="sv_MaSV" type="text" placeholder="SV2100001"/>
+      </div>
+      <div class="form-group">
+        <label>Họ tên *</label>
+        <input id="sv_HoTen" type="text" placeholder="Nguyễn Văn A"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Ngày sinh *</label>
+        <input id="sv_NgaySinh" type="date"/>
+      </div>
+      <div class="form-group">
+        <label>Giới tính *</label>
+        <select id="sv_GioiTinh">
+          <option value="Nam">Nam</option><option value="Nữ">Nữ</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Email *</label>
+        <input id="sv_Email" type="email" placeholder="abc@student.edu.vn"/>
+      </div>
+      <div class="form-group">
+        <label>SĐT</label>
+        <input id="sv_SDT" type="text" placeholder="09xxxxxxxx"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Lớp *</label>
+        <select id="sv_MaLop"></select>
+      </div>
+      <div class="form-group">
+        <label>Trạng thái</label>
+        <select id="sv_TrangThai">
+          <option>Đang học</option><option>Bảo lưu</option>
+          <option>Tốt nghiệp</option><option>Thôi học</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Địa chỉ</label>
+      <input id="sv_DiaChi" type="text" placeholder="Hà Nội"/>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-secondary" onclick="closeAllModals()">Hủy</button>
+    <button class="btn-primary" onclick="saveSinhVien()"><i class="fas fa-floppy-disk"></i> Lưu</button>
+  </div>
+</div>
+
+<!-- Modal Giảng Viên -->
+<div class="modal" id="gvModal">
+  <div class="modal-header">
+    <h3 id="gvModalTitle">Thêm Giảng viên</h3>
+    <button class="modal-close" onclick="closeAllModals()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="gvEditId"/>
+    <div class="form-row">
+      <div class="form-group"><label>Mã GV *</label><input id="gv_MaGV" type="text"/></div>
+      <div class="form-group"><label>Họ tên *</label><input id="gv_HoTen" type="text"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Ngày sinh *</label><input id="gv_NgaySinh" type="date"/></div>
+      <div class="form-group"><label>Giới tính *</label>
+        <select id="gv_GioiTinh"><option>Nam</option><option>Nữ</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Học vị *</label>
+        <select id="gv_HocVi">
+          <option>Cử nhân</option><option>Thạc sĩ</option><option>Tiến sĩ</option>
+          <option>PGS</option><option>GS</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Chuyên ngành *</label><input id="gv_ChuyenNganh" type="text"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Email *</label><input id="gv_Email" type="email"/></div>
+      <div class="form-group"><label>SĐT</label><input id="gv_SDT" type="text"/></div>
+    </div>
+    <div class="form-group"><label>Khoa *</label><select id="gv_MaKhoa"></select></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-secondary" onclick="closeAllModals()">Hủy</button>
+    <button class="btn-primary" onclick="saveGiangVien()"><i class="fas fa-floppy-disk"></i> Lưu</button>
+  </div>
+</div>
+
+<!-- Modal Môn Học -->
+<div class="modal" id="mhModal">
+  <div class="modal-header">
+    <h3 id="mhModalTitle">Thêm Môn học</h3>
+    <button class="modal-close" onclick="closeAllModals()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="mhEditId"/>
+    <div class="form-row">
+      <div class="form-group"><label>Mã MH *</label><input id="mh_MaMH" type="text"/></div>
+      <div class="form-group"><label>Tên môn *</label><input id="mh_TenMH" type="text"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Số tín chỉ *</label><input id="mh_SoTinChi" type="number" min="1" max="10"/></div>
+      <div class="form-group"><label>Loại môn *</label>
+        <select id="mh_LoaiMon"><option>Bắt buộc</option><option>Tự chọn</option><option>Đại cương</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Mô tả</label><textarea id="mh_MoTa" rows="3"></textarea></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-secondary" onclick="closeAllModals()">Hủy</button>
+    <button class="btn-primary" onclick="saveMonHoc()"><i class="fas fa-floppy-disk"></i> Lưu</button>
+  </div>
+</div>
+
+<!-- Modal Lớp -->
+<div class="modal" id="lopModal">
+  <div class="modal-header">
+    <h3 id="lopModalTitle">Thêm Lớp</h3>
+    <button class="modal-close" onclick="closeAllModals()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="lopEditId"/>
+    <div class="form-row">
+      <div class="form-group"><label>Mã Lớp *</label><input id="lop_MaLop" type="text"/></div>
+      <div class="form-group"><label>Tên Lớp *</label><input id="lop_TenLop" type="text"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Ngành *</label><select id="lop_MaNganh"></select></div>
+      <div class="form-group"><label>Năm nhập học *</label><input id="lop_NamNhapHoc" type="number" min="2000" max="2100"/></div>
+    </div>
+    <div class="form-group"><label>Ngày nhập học *</label><input id="lop_NgayNhapHoc" type="date"/></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-secondary" onclick="closeAllModals()">Hủy</button>
+    <button class="btn-primary" onclick="saveLop()"><i class="fas fa-floppy-disk"></i> Lưu</button>
+  </div>
+</div>
+
+<!-- Modal Khoa -->
+<div class="modal" id="khoaModal">
+  <div class="modal-header">
+    <h3 id="khoaModalTitle">Thêm Khoa</h3>
+    <button class="modal-close" onclick="closeAllModals()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="khoaEditId"/>
+    <div class="form-row">
+      <div class="form-group"><label>Mã Khoa *</label><input id="khoa_MaKhoa" type="text"/></div>
+      <div class="form-group"><label>Tên Khoa *</label><input id="khoa_TenKhoa" type="text"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Email</label><input id="khoa_Email" type="email"/></div>
+      <div class="form-group"><label>SĐT</label><input id="khoa_SDT" type="text"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Địa chỉ</label><input id="khoa_DiaChi" type="text"/></div>
+      <div class="form-group"><label>Ngày thành lập *</label><input id="khoa_NgayTL" type="date"/></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-secondary" onclick="closeAllModals()">Hủy</button>
+    <button class="btn-primary" onclick="saveKhoa()"><i class="fas fa-floppy-disk"></i> Lưu</button>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal modal-sm" id="confirmModal">
+  <div class="modal-header">
+    <h3><i class="fas fa-triangle-exclamation" style="color:var(--red)"></i> Xác nhận xóa</h3>
+    <button class="modal-close" onclick="closeAllModals()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <p id="confirmMsg">Bạn có chắc chắn muốn xóa?</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-secondary" onclick="closeAllModals()">Hủy</button>
+    <button class="btn-danger" id="confirmBtn">Xóa</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
