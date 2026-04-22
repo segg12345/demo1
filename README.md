@@ -76,13 +76,13 @@ const dbConfig = {
 ## 📂 BƯỚC 4 — Đặt file đúng vị trí
 
 ```
-1. Tạo thư mục mới, ví dụ: C:\qlsv\
+1. Tạo thư mục mới, ví dụ: C:\Users\thean\qlsv
 
 2. Copy vào thư mục đó:
    - server.js
    - package.json
 
-3. Tạo thư mục con: C:\qlsv\public\
+3. Tạo thư mục con: C:\Users\thean\qlsv\public\
 
 4. Copy vào public\:
    - index.html
@@ -104,18 +104,20 @@ cd C:\qlsv
 
 # Cài thư viện
 npm install
+#Cài đặt pm2
+npm install -g pm2
 
-# Chạy server
-node server.js
-```
+#Cài server QLSV
+pm2 start server.js --name qlsv
 
-Nếu thành công sẽ thấy:
-```
-✅ Đã kết nối SQL Server thành công
-🚀 QLSV Server đang chạy tại http://localhost:3000
-```
+#mở server
+pm2 start QLSV
 
-Mở trình duyệt: **http://localhost:3000**
+
+
+Nếu thành công thì truy cập:
+```
+http://localhost:3000/
 
 ---
 
@@ -131,26 +133,6 @@ Mở trình duyệt: **http://localhost:3000**
 
 ---
 
-## ⚡ Chạy tự động với nodemon (khuyến nghị khi dev)
-
-```bash
-npm run dev
-# Server tự restart khi sửa code
-```
-
----
-
-## ❌ Xử lý lỗi thường gặp
-
-| Lỗi | Nguyên nhân | Cách sửa |
-|-----|-------------|----------|
-| `ConnectionError: Failed to connect` | Sai server/port | Kiểm tra tên instance SQL Server |
-| `Login failed for user 'sa'` | Sai mật khẩu hoặc chưa bật SQL Auth | Xem Bước 2.2 và 2.3 |
-| `Cannot open database "QLSV"` | Chưa chạy file SQL | Chạy SQLQuery1_TEST.sql trước |
-| `EADDRINUSE port 3000` | Port đã bị dùng | Sửa PORT trong server.js |
-| Trang trắng / lỗi fetch | API chưa chạy | Đảm bảo `node server.js` đang chạy |
-
----
 
 ## 🔧 Thay đổi port
 
