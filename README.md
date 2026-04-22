@@ -82,7 +82,7 @@ const dbConfig = {
    - server.js
    - package.json
 
-3. Tạo thư mục con: C:\Users\thean\qlsv\public\
+3. Tạo thư mục con: C:\Users\thean\qlsv\public
 
 4. Copy vào public\:
    - index.html
@@ -100,7 +100,7 @@ const dbConfig = {
 Mở **Command Prompt** hoặc **Terminal**, vào thư mục dự án:
 
 ```bash
-cd C:\qlsv
+cd C:\Users\thean\qlsv
 
 # Cài thư viện
 npm install
